@@ -2,29 +2,23 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import {authValidator} from './validators/authValidator.js';
+import {validationResult} from 'express-validator';
 
 dotenv.config();
 const app = express();
 const port = 3000;
 
-const connect = async () => {
-  try {
-    await mongoose.connect(`mongodb+srv://${process.env.LOGIN}:${process.env.PASSWORD}@instacluster.12uwrs7.mongodb.net/\n`, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      dbName: 'instadram',
-    });
-  } catch (e) {
-    console.log(e);
-  }
-};
-
+mongoose.connect(`mongodb+srv://${process.env.LOGIN}:${process.env.PASSWORD}@instacluster.12uwrs7.mongodb.net/\n`, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  dbName: 'instadram',
+});
 mongoose.connection.on('connected', () => console.log('Connected to MongoDB'));
 
 app.listen(port, () => {
   console.log(`App started on port ${port}`);
 });
-connect();
 
 
 app.use(cors());
@@ -36,9 +30,13 @@ app.get('/', (req, res) => {
   });
 });
 
-app.post('/auth/login', ((req, res) => {
-  if (!req.body) return res.sendStatus(400);
-  console.log(req.body);
+app.post('/auth/login', authValidator, ((req, res) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(400).json(errors.array());
+  }
+  console.log(req.headers);
   res.json({
     status: 200,
   });
