@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import {UserRequest} from '../controllers/types.ts';
 
 const usersSchema = new mongoose.Schema({
   firstName: {
