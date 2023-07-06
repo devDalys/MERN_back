@@ -5,3 +5,9 @@ export interface UserRequest {
   password: string;
   email: string
 }
+
+export interface PostsRequest {
+  imageUrl: string;
+  user: UserRequest
+  userId: string
+}

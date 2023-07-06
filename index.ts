@@ -6,6 +6,7 @@ import {LoginValidator, AuthValidators} from './validators/authValidators.ts';
 import {GetMeController, LoginController, RegistrationController} from './controllers/UserController.ts';
 import {ErrorValidator} from './validators/errorValidator.ts';
 import {CheckAuth} from './validators/checkAuth.ts';
+import {CreatePost, GetPosts} from './controllers/PostsController.ts';
 
 dotenv.config();
 const app = express();
@@ -28,6 +29,9 @@ app.use(express.json());
 app.post('/auth/login', LoginValidator, ErrorValidator, LoginController);
 app.post('/auth/register', AuthValidators, ErrorValidator, RegistrationController);
 app.get('/auth/me', CheckAuth, GetMeController)
+
+app.post('/posts', CheckAuth, CreatePost)
+app.get('/posts', CheckAuth, GetPosts)
 
 
 
