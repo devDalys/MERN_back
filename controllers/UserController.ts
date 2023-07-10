@@ -3,6 +3,7 @@ import UserModel from '../models/users.ts';
 import * as express from 'express'
 import {UserRequest} from './types.ts';
 import jwt from 'jsonwebtoken';
+import {sendError} from '../utils/sendError.ts';
 
 export const RegistrationController = async (req: express.Request<any,any, UserRequest>, res: express.Response) => {
  try{
@@ -33,7 +34,7 @@ export const RegistrationController = async (req: express.Request<any,any, UserR
    const {passwordHash, ...userInfo} = user.toObject();
    res.json({...userInfo, token})
  }catch (e) {
-   res.status(400).json({msg: 'Не удалось зарегистрироваться'})
+   sendError({res, errorCode: 500, messageText: 'Что-то пошло не так'})
  }
 }
 
@@ -42,16 +43,12 @@ export const LoginController = async (req: express.Request<any,any, UserRequest>
     const user = await UserModel.findOne({ email: req.body.email });
 
     if (!user) {
-      return res.status(404).json({
-        msg: 'Неверный логин или пароль'
-      });
+      return sendError({errorCode: 404, res, messageText: 'Неверный логин или пароль'})
     }
 
     const isValidPass = await bcrypt.compare(req.body.password, user.toObject().passwordHash);
     if (!isValidPass) {
-      return res.status(404).json({
-        msg: 'Неверный логин или пароль'
-      });
+      return sendError({errorCode: 404, res, messageText: 'Неверный логин или пароль'})
     }
 
     const token = jwt.sign(
@@ -67,10 +64,7 @@ export const LoginController = async (req: express.Request<any,any, UserRequest>
     const { passwordHash, ...userData } = user.toObject();
     res.json({ ...userData, token });
   } catch (err) {
-    console.log(err);
-    res.status(500).json({
-      msg: 'Не удалось авторизоваться '
-    });
+    sendError({errorCode: 500, res, messageText: 'Не удалось авторизоваться'})
   }
 };
 
@@ -78,11 +72,11 @@ export const GetMeController = async(req: express.Request<any,any, UserRequest>,
   try {
     const user = await UserModel.findById(req.body.userId)
     if (!user) {
-      return res.sendStatus(403)
+      return sendError({res, errorCode: 403, messageText: 'Авторизация провалена'})
     }
-    const {passwordHash, ...data} = user?.toObject()
-    res.json({data})
+    const {passwordHash, ...data} = user.toObject()
+    res.json(data)
   }catch (e) {
-    res.sendStatus(500)
+    sendError({res, errorCode: 500, messageText: 'Что-то пошло не так'})
   }
 }

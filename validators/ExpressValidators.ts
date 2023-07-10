@@ -1,6 +1,6 @@
 import {body} from 'express-validator';
 
-export const AuthValidators = [
+export const ExpressValidators = [
   body('email').isEmail(),
   body('password').isLength({ min: 5, max: 50 }),
   body('firstName').isLength({ min: 2, max: 50 }),
