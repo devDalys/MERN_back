@@ -11,3 +11,7 @@ export interface PostsRequest {
   user: UserRequest
   userId: string
 }
+
+export interface UploadRequest {
+
+}

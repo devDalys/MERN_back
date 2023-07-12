@@ -3,7 +3,7 @@ import {PostsRequest} from './types.ts';
 import {PostsSchema} from '../models/posts.ts';
 import {sendError} from '../utils/sendError.ts';
 
-export const CreatePost = async (req: express.Request<any,any, PostsRequest>, res: express.Response) => {
+const CreatePost = async (req: express.Request<any,any, PostsRequest>, res: express.Response) => {
     try {
       const doc = new PostsSchema({
         user: req.body.userId,
@@ -17,7 +17,7 @@ export const CreatePost = async (req: express.Request<any,any, PostsRequest>, re
     }
 }
 
-export const GetPosts = async (req: express.Request<any,any, PostsRequest>, res: express.Response) => {
+const GetPosts = async (req: express.Request<any,any, PostsRequest>, res: express.Response) => {
   try {
 
     const post = await PostsSchema.find().populate('user').exec()
@@ -27,3 +27,7 @@ export const GetPosts = async (req: express.Request<any,any, PostsRequest>, res:
   }
 }
 
+export const PostsControllers = {
+  CreatePost,
+  GetPosts
+}

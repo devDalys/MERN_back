@@ -5,7 +5,7 @@ import {UserRequest} from './types.ts';
 import jwt from 'jsonwebtoken';
 import {sendError} from '../utils/sendError.ts';
 
-export const RegistrationController = async (req: express.Request<any,any, UserRequest>, res: express.Response) => {
+const Registration = async (req: express.Request<any,any, UserRequest>, res: express.Response) => {
  try{
    const password = req.body.password;
 
@@ -38,7 +38,7 @@ export const RegistrationController = async (req: express.Request<any,any, UserR
  }
 }
 
-export const LoginController = async (req: express.Request<any,any, UserRequest>, res: express.Response) => {
+const Login = async (req: express.Request<any,any, UserRequest>, res: express.Response) => {
   try {
     const user = await UserModel.findOne({ email: req.body.email });
 
@@ -68,7 +68,7 @@ export const LoginController = async (req: express.Request<any,any, UserRequest>
   }
 };
 
-export const GetMeController = async(req: express.Request<any,any, UserRequest>, res: express.Response) => {
+const GetMe = async(req: express.Request<any,any, UserRequest>, res: express.Response) => {
   try {
     const user = await UserModel.findById(req.body.userId)
     if (!user) {
@@ -79,4 +79,10 @@ export const GetMeController = async(req: express.Request<any,any, UserRequest>,
   }catch (e) {
     sendError({res, errorCode: 500, messageText: 'Что-то пошло не так'})
   }
+}
+
+export const AuthController = {
+  GetMe,
+  Login,
+  Registration
 }
