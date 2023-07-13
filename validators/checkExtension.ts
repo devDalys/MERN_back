@@ -1,6 +1,6 @@
 import express from 'express';
 import path from 'path';
-import {sendError} from '../utils/sendError.ts';
+import {sendError} from '../utils/SendError.ts';
 import * as fs from 'fs';
 
 export const checkExtension = (req: express.Request<any, any, FormData>, res: express.Response, next: express.NextFunction) => {

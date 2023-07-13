@@ -3,9 +3,9 @@ import UserModel from '../models/users.ts';
 import * as express from 'express'
 import {UserRequest} from './types.ts';
 import jwt from 'jsonwebtoken';
-import {sendError} from '../utils/sendError.ts';
+import {sendError, sendSuccess} from '../utils/SendError.ts';
 
-const Registration = async (req: express.Request<any,any, UserRequest>, res: express.Response) => {
+const Registration = async (req: express.Request<never,never, UserRequest>, res: express.Response) => {
  try{
    const password = req.body.password;
 
@@ -38,7 +38,8 @@ const Registration = async (req: express.Request<any,any, UserRequest>, res: exp
  }
 }
 
-const Login = async (req: express.Request<any,any, UserRequest>, res: express.Response) => {
+
+const Login = async (req: express.Request<never,never, UserRequest>, res: express.Response) => {
   try {
     const user = await UserModel.findOne({ email: req.body.email });
 
@@ -61,8 +62,9 @@ const Login = async (req: express.Request<any,any, UserRequest>, res: express.Re
       }
     );
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { passwordHash, ...userData } = user.toObject();
-    res.json({ ...userData, token });
+    sendSuccess(res,{...userData, token });
   } catch (err) {
     sendError({errorCode: 500, res, messageText: 'Не удалось авторизоваться'})
   }
@@ -74,8 +76,9 @@ const GetMe = async(req: express.Request<any,any, UserRequest>, res: express.Res
     if (!user) {
       return sendError({res, errorCode: 403, messageText: 'Авторизация провалена'})
     }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const {passwordHash, ...data} = user.toObject()
-    res.json(data)
+    sendSuccess(res, data)
   }catch (e) {
     sendError({res, errorCode: 500, messageText: 'Что-то пошло не так'})
   }

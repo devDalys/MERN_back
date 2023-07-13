@@ -21,14 +21,24 @@ export const HTTP_RESPONSE_CODES = {
   ...HTTP_ERROR_CODES,
 } as const;
 
-type Props = {
+type FailureProps = {
   res: express.Response,
   errorCode: typeof HTTP_ERROR_CODES[keyof typeof HTTP_ERROR_CODES],
   messageText: string
 }
 
-export const sendError = ({res, errorCode, messageText}: Props) => {
+
+export const sendError = ({res, errorCode, messageText}: FailureProps) => {
   return res.status(errorCode).json({
-    msg: messageText
-  })
-}
+    msg: messageText,
+  });
+};
+
+export const sendSuccess = (res: express.Response, data: any) => {
+  return res.json({
+    body: {
+     ...data
+    },
+    status: 200,
+  });
+};

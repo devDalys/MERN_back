@@ -1,7 +1,7 @@
 import * as express from 'express';
 import {PostsRequest} from './types.ts';
 import {PostsSchema} from '../models/posts.ts';
-import {sendError} from '../utils/sendError.ts';
+import {sendError, sendSuccess} from '../utils/SendError.ts';
 
 const CreatePost = async (req: express.Request<any,any, PostsRequest>, res: express.Response) => {
     try {
@@ -11,7 +11,7 @@ const CreatePost = async (req: express.Request<any,any, PostsRequest>, res: expr
       })
       const post = await doc.save()
 
-      res.json(post)
+      sendSuccess(res, post)
     }catch (e) {
       sendError({res, errorCode: 500, messageText: 'Что-то пошло не так'})
     }
@@ -21,7 +21,7 @@ const GetPosts = async (req: express.Request<any,any, PostsRequest>, res: expres
   try {
 
     const post = await PostsSchema.find().populate('user').exec()
-    res.json(post)
+    sendSuccess(res, post)
   }catch (e) {
     sendError({res, errorCode: 500, messageText: 'Что-то пошло не так'})
   }
