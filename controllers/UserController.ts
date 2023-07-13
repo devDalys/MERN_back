@@ -32,7 +32,7 @@ const Registration = async (req: express.Request<never,never, UserRequest>, res:
    );
 
    const {passwordHash, ...userInfo} = user.toObject();
-   res.json({...userInfo, token})
+   sendSuccess(res,{...userInfo, token} )
  }catch (e) {
    sendError({res, errorCode: 500, messageText: 'Что-то пошло не так'})
  }
