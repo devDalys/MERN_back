@@ -36,9 +36,7 @@ export const sendError = ({res, errorCode, messageText}: FailureProps) => {
 
 export const sendSuccess = (res: express.Response, data: any) => {
   return res.json({
-    body: {
-     ...data
-    },
+    ...data,
     status: 200,
   });
 };
