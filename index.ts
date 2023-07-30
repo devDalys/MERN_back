@@ -2,7 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import {LoginValidator, ExpressValidators} from './validators/ExpressValidators.ts';
+import {LoginValidator, RegisterValidator} from './validators/RegisterValidator.ts';
 import {
   AuthController,
 } from './controllers/UserController.ts';
@@ -39,7 +39,6 @@ const storage = multer.diskStorage({
     cb(null, 'uploads')
   },
   filename(_, file: Express.Multer.File, callback: (error: (Error | null), filename: string) => void) {
-    // @ts-ignore
     callback(null, uuidv4() + path.extname(file.originalname));
   }
 })
@@ -49,7 +48,7 @@ const upload = multer({storage});
 app.post('/upload', checkAuth, upload.single('image'),checkExtension, UploadControllers.Upload);
 
 app.post('/auth/login', LoginValidator, ErrorValidator, AuthController.Login);
-app.post('/auth/register', ExpressValidators, ErrorValidator, AuthController.Registration);
+app.post('/auth/register', RegisterValidator, ErrorValidator, AuthController.Registration);
 app.get('/auth/me', checkAuth, AuthController.GetMe);
 
 app.post('/posts', checkAuth, PostsControllers.CreatePost);
