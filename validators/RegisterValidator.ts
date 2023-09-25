@@ -8,6 +8,6 @@ export const RegisterValidator = [
 ];
 
 export const LoginValidator = [
-  body('email', 'Неверный формат Email').isEmail(),
-  body('password').isLength({ min: 5, max: 50 }),
+  body('email', 'Неверный логин или пароль').isEmail(),
+  body('password', 'Неверный логин или пароль').isLength({ min: 5, max: 50 }),
 ]

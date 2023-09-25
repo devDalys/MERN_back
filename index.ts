@@ -47,8 +47,8 @@ const upload = multer({storage});
 
 app.post('/upload', checkAuth, upload.single('image'),checkExtension, UploadControllers.Upload);
 
-app.post('/auth/login', LoginValidator, ErrorValidator, AuthController.Login);
-app.post('/auth/register', RegisterValidator, ErrorValidator, AuthController.Registration);
+app.post('/auth/login', LoginValidator, ErrorValidator.minifiedValidator, AuthController.Login);
+app.post('/auth/register', RegisterValidator, ErrorValidator.fullValidator, AuthController.Registration);
 app.get('/auth/me', checkAuth, AuthController.GetMe);
 
 app.post('/posts', checkAuth, PostsControllers.CreatePost);
